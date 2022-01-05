@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using WeatherApp.Models;
+using WeatherApp.Services;
 
 namespace WeatherApp.Adapters
 {
@@ -47,7 +49,7 @@ namespace WeatherApp.Adapters
              {
                  view = _context.LayoutInflater.Inflate(Resource.Layout.weather_row_layout, null);
              }
-             view.FindViewById<TextView>(Resource.Id.dayTextView).Text = _items[position].dt_txt;
+             view.FindViewById<TextView>(Resource.Id.dayTextView).Text = dtTxtToDayTime(_items[position].dt_txt);
              view.FindViewById<TextView>(Resource.Id.tempTextView).Text = _items[position].main.temp.ToString() + " °C";
              view.FindViewById<TextView>(Resource.Id.windTextView).Text = _items[position].wind.speed.ToString() + "m/s";
 
@@ -56,6 +58,13 @@ namespace WeatherApp.Adapters
         public void UpdateData(List<WeatherList> items)
         {
             _items = items;
+        }
+         
+        public String dtTxtToDayTime(string dt_txt)
+        {
+            var parsedDate = DateTime.Parse(dt_txt);
+            var day = parsedDate.ToString("dddd HH:mm");
+            return day;
         }
     }
 }
